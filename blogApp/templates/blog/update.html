@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form method="POST">
+        <h1>Update your blog</h1>
+      {% csrf_token %}
+        <label>Title:</label><br>
+        <input type="text" id="title" name="Post_title" value="{{object.Post_title}}" required><br>
+
+        <label>Content:</label><br>
+        <textarea id="content" name="Post_content" rows="5" cols="40"  required>{{object.Post_content}}</textarea><br><br>
+
+
+        <button type="submit">Update</button>
+
+
+    </form>
+</body>
+</html>

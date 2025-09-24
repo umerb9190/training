@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   {% csrf_token %}
+
+     {%for posts in all_blog %}
+        <h2>ID: {{posts.id}}</h2>
+        <h2>Post Title: {{posts.Post_title}}</h2>
+        <h4>Post Content: {{posts.Post_content}}</h4>
+         <form method="GET" action="{% url 'update_blog' posts.id %}">
+            <button type="submit">Update</button>
+        </form>
+         <form method="GET" action="{% url 'delete_blog' posts.id %}">
+            <button type="submit">Delete</button>
+        </form>
+         
+       
+
+         <br><br>
+       
+     {% endfor %}
+</body>
+</html>
