@@ -26,9 +26,6 @@ class Blog(APIView):
     def get(self,request):
             blog=Post.objects.all()
             serializer=PostSerializer(blog,many=True)
-            # user=request.user
-            # print("user " ,user)
-            # print("rrrr ",serializer)
             return Response(serializer.data)
     
     
