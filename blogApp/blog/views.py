@@ -24,49 +24,67 @@ class Blog(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self,request):
-            blog=Post.objects.all()
+
+            #-------simple way----------
+            # blog=Post.objects.all()
+            # serializer=PostSerializer(blog,many=True)
+            # return Response(serializer.data)
+
+
+            # blog=Post.objects.raw('Select * from blog_post')
+            # blog = Post.objects.raw('SELECT * FROM blog_post WHERE "Post_title" = %s'  ["n8n"])
+            blog = Post.objects.raw(
+                'SELECT * FROM blog_post WHERE "Post_title" = %s AND "Post_content" LIKE %s',
+                ["n8n", "%tool%"]
+            )
+
+
+
+            print("data from query: ",blog)
             serializer=PostSerializer(blog,many=True)
             return Response(serializer.data)
-    
-    
+
+
    
     def post(self,request):
 
         #----bulk create----
 
-        blogs=request.data
-        bulk_create=[Post(**blog) for blog in blogs ]
-        Post.objects.bulk_create(bulk_create)
-        return Response(status=status.HTTP_201_CREATED)
+        # blogs=request.data
+        # bulk_create=[Post(**blog) for blog in blogs ]
+        # Post.objects.bulk_create(bulk_create)
+        # return Response(status=status.HTTP_201_CREATED)
     
      #----------create-------
              
         print("hello",request.data)
         title = request.data.get("Post_title")
         content = request.data.get("Post_content")
-        Post.objects.create(Post_title=title,Post_content=content)
+        post=Post.objects.create(Post_title=title,Post_content=content)
+        serializer=PostSerializer(post)
+        return Response(serializer.data)
 
 
 
         #-----get_or_create-------
-        title = request.data.get("Post_title")
-        content = request.data.get("Post_content")
+        # title = request.data.get("Post_title")
+        # content = request.data.get("Post_content")
 
-        post, created = Post.objects.get_or_create(
-        Post_title=title,
-        defaults={"Post_content": content}
-        )
+        # post, created = Post.objects.get_or_create(
+        # Post_title=title,
+        # defaults={"Post_content": content}
+        # )
 
-        serializer = PostSerializer(post)
+        # serializer = PostSerializer(post)
 
-        return Response(serializer.data)
+        # return Response(serializer.data)
 
        #-----serializer-------
-        serializer = PostSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors)
+        # serializer = PostSerializer(data=request.data)
+        # if serializer.is_valid():
+        #     serializer.save()
+        #     return Response(serializer.data)
+        # return Response(serializer.errors)
 
        
     
